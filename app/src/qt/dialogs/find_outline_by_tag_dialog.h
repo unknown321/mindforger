@@ -39,7 +39,7 @@ private:
     Ontology& ontology;
 
     QListView* listView;
-    QStringList listViewStrings;
+    QList<QString> listViewStrings;
     QStringListModel listViewModel;
     QPushButton* closeButton;
 

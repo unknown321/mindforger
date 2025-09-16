@@ -28,9 +28,9 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QListIterator>
-#include <QRegExp>
-#include <QStringList>
-#include <QTextCodec>
+#include <QRegularExpression>
+#include <QList>
+#include <QStringConverter>
 
 #ifdef _WIN32
   #include "../../../deps/hunspell/hunspell.hxx"
@@ -59,23 +59,23 @@ public:
 		return m_dictionary;
 	}
 
-	QStringRef check(const QString& string, int start_at) const;
-	QStringList suggestions(const QString& word) const;
+    QStringView check(const QString& string, int start_at) const;
+	QList<QString> suggestions(const QString& word) const;
 
 	void addToPersonal(const QString& word);
-	void addToSession(const QStringList& words);
-	void removeFromSession(const QStringList& words);
+	void addToSession(const QList<QString>& words);
+	void removeFromSession(const QList<QString>& words);
 
 private:
 	Hunspell* m_dictionary;
-	QTextCodec* m_codec;
+    QStringDecoder m_decoder;
+    QStringEncoder m_coder;
 };
 
 //-----------------------------------------------------------------------------
 
 DictionaryHunspell::DictionaryHunspell(const QString& language) :
-    m_dictionary(nullptr),
-    m_codec(nullptr)
+    m_dictionary(nullptr)
 {
 	// Find dictionary files
     QString aff = QFileInfo("dict:" + language + ".aff").canonicalFilePath();
@@ -99,8 +99,15 @@ DictionaryHunspell::DictionaryHunspell(const QString& language) :
 	m_dictionary = new Hunspell( ("\\\\?\\" + QDir::toNativeSeparators(aff)).toUtf8().constData(),
 			("\\\\?\\" + QDir::toNativeSeparators(dic)).toUtf8().constData() );
 #endif
-	m_codec = QTextCodec::codecForName(m_dictionary->get_dic_encoding());
-	if (!m_codec) {
+    for (const auto &v: QStringConverter::availableCodecs()) {
+        if (v == m_dictionary->get_dic_encoding()) {
+            m_coder = QStringEncoder(v);
+            m_decoder = QStringDecoder(v);
+            break;
+        }
+    }
+
+    if (!m_coder.isValid() || !m_decoder.isValid()) {
 		delete m_dictionary;
         m_dictionary = nullptr;
 	}
@@ -115,7 +122,7 @@ DictionaryHunspell::~DictionaryHunspell()
 
 //-----------------------------------------------------------------------------
 
-QStringRef DictionaryHunspell::check(const QString& string, int start_at) const
+QStringView DictionaryHunspell::check(const QString& string, int start_at) const
 {
     // Incorporated ghostwriter's word splitting algorithm into the original
     // FocusWriter algorithm to ensure hyphenated words are counted as one
@@ -217,7 +224,7 @@ QStringRef DictionaryHunspell::check(const QString& string, int start_at) const
         {
             if (!isUppercase && !isNumber)
             {
-                QStringRef check(&string, index, wordLen);
+                auto check = QStringView(string).sliced(index, wordLen);
                 QString word = check.toString();
 
                 // Replace any fancy single quotes with a "normal" single quote.
@@ -225,13 +232,13 @@ QStringRef DictionaryHunspell::check(const QString& string, int start_at) const
 
 #if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
                 // deprecated Hunspell API
-                if (!m_dictionary->spell(m_codec->fromUnicode(word).constData()))
+                if (!m_dictionary->spell(word.toUtf8().constData()))
                 {
                     return check;
                 }
 #else
                 // new Hunspell API
-                if (!m_dictionary->spell(m_codec->fromUnicode(word).toStdString())) {
+                if (!m_dictionary->spell(word.toUtf8().constData())) {
                     return check;
                 }
 #endif
@@ -247,14 +254,14 @@ QStringRef DictionaryHunspell::check(const QString& string, int start_at) const
         }
     }
 
-	return QStringRef();
+    return QStringView();
 }
 
 //-----------------------------------------------------------------------------
 
-QStringList DictionaryHunspell::suggestions(const QString& word) const
+QList<QString> DictionaryHunspell::suggestions(const QString& word) const
 {
-	QStringList result;
+	QList<QString> result;
 	QString check = word;
 
     // Replace any fancy single quotes with a "normal" single quote.
@@ -262,10 +269,10 @@ QStringList DictionaryHunspell::suggestions(const QString& word) const
 
 #if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
     char** suggestions = nullptr;
-	int count = m_dictionary->suggest(&suggestions, m_codec->fromUnicode(check).constData());
+    int count = m_dictionary->suggest(&suggestions, check.toUtf8().constData());
     if (suggestions != nullptr) {
 		for (int i = 0; i < count; ++i) {
-            QString word = m_codec->toUnicode(suggestions[i]);
+            QString word = suggestions[i];
 			result.append(word);
 		}
 
@@ -297,26 +304,26 @@ void DictionaryHunspell::addToPersonal(const QString& word)
 
 //-----------------------------------------------------------------------------
 
-void DictionaryHunspell::addToSession(const QStringList& words)
+void DictionaryHunspell::addToSession(const QList<QString>& words)
 {
 	foreach (const QString& word, words) {
 #if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
-		m_dictionary->add(m_codec->fromUnicode(word).constData());
+        m_dictionary->add(word.toUtf8().constData());
 #else
-		m_dictionary->add(m_codec->fromUnicode(word).toStdString());
+        m_dictionary->add(word.toUtf8().constData());
 #endif
 	}
 }
 
 //-----------------------------------------------------------------------------
 
-void DictionaryHunspell::removeFromSession(const QStringList& words)
+void DictionaryHunspell::removeFromSession(const QList<QString>& words)
 {
 	foreach (const QString& word, words) {
 #if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
-		m_dictionary->remove(m_codec->fromUnicode(word).constData());
+        m_dictionary->remove(word.toUtf8().constData());
 #else
-		m_dictionary->remove(m_codec->fromUnicode(word).toStdString());
+        m_dictionary->remove(word.toUtf8().constData());
 #endif
 
 	}
@@ -328,14 +335,14 @@ void DictionaryHunspell::removeFromSession(const QStringList& words)
 
 DictionaryProviderHunspell::DictionaryProviderHunspell()
 {
-	QStringList dictdirs = QDir::searchPaths("dict");
+	QList<QString> dictdirs = QDir::searchPaths("dict");
 #if !defined(Q_OS_MAC) && defined(Q_OS_UNIX)
-	QStringList xdg = QString(qgetenv("XDG_DATA_DIRS")).split(QChar(':'), QString::SkipEmptyParts);
+    QList<QString> xdg = QString(qgetenv("XDG_DATA_DIRS")).split(QChar(':'), Qt::SkipEmptyParts);
 	if (xdg.isEmpty()) {
 		xdg.append("/usr/local/share");
 		xdg.append("/usr/share");
 	}
-	QStringList subdirs = QStringList() << "/hunspell" << "/myspell/dicts" << "/myspell" << "/mozilla-dicts";
+	QList<QString> subdirs = QList<QString>() << "/hunspell" << "/myspell/dicts" << "/myspell" << "/mozilla-dicts";
 	foreach (const QString& subdir, subdirs) {
 		foreach (const QString& dir, xdg) {
 			QString path = dir + subdir;
@@ -350,10 +357,10 @@ DictionaryProviderHunspell::DictionaryProviderHunspell()
 
 //-----------------------------------------------------------------------------
 
-QStringList DictionaryProviderHunspell::availableDictionaries() const
+QList<QString> DictionaryProviderHunspell::availableDictionaries() const
 {
-	QStringList result;
-	QStringList locations = QDir::searchPaths("dict");
+	QList<QString> result;
+	QList<QString> locations = QDir::searchPaths("dict");
 	QListIterator<QString> i(locations);
     // std::cout << "  Dictionary search path directories ("
     //          << locations.size()
@@ -361,10 +368,10 @@ QStringList DictionaryProviderHunspell::availableDictionaries() const
 	while (i.hasNext()) {
 		QDir dir(i.next());
         // std::cout << "    " << dir.path().toStdString() << std::endl;
-		QStringList dic_files = dir.entryList(QStringList() << "*.dic*", QDir::Files, QDir::Name | QDir::IgnoreCase);
-		dic_files.replaceInStrings(QRegExp("\\.dic.*"), "");
-		QStringList aff_files = dir.entryList(QStringList() << "*.aff*", QDir::Files);
-		aff_files.replaceInStrings(QRegExp("\\.aff.*"), "");
+		QList<QString> dic_files = dir.entryList(QList<QString>() << "*.dic*", QDir::Files, QDir::Name | QDir::IgnoreCase);
+        dic_files.replaceInStrings(QRegularExpression("\\.dic.*"), "");
+		QList<QString> aff_files = dir.entryList(QList<QString>() << "*.aff*", QDir::Files);
+        aff_files.replaceInStrings(QRegularExpression("\\.aff.*"), "");
 
 		foreach (const QString& language, dic_files) {
 			if (aff_files.contains(language) && !result.contains(language)) {

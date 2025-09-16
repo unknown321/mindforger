@@ -20,9 +20,10 @@
 #ifndef ABSTRACT_DICTIONARY_H
 #define ABSTRACT_DICTIONARY_H
 
+#include <QList>
+
 class QString;
-class QStringList;
-class QStringRef;
+class QStringView;
 
 class AbstractDictionary
 {
@@ -30,12 +31,12 @@ public:
 	virtual ~AbstractDictionary() { }
 
 	virtual bool isValid() const = 0;
-	virtual QStringRef check(const QString& string, int start_at) const = 0;
-	virtual QStringList suggestions(const QString& word) const = 0;
+    virtual QStringView check(const QString& string, int start_at) const = 0;
+    virtual QList<QString> suggestions(const QString& word) const = 0;
 
 	virtual void addToPersonal(const QString& word) = 0;
-	virtual void addToSession(const QStringList& words) = 0;
-	virtual void removeFromSession(const QStringList& words) = 0;
+    virtual void addToSession(const QList<QString>& words) = 0;
+    virtual void removeFromSession(const QList<QString>& words) = 0;
 };
 
 #endif

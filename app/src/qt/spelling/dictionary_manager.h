@@ -27,7 +27,7 @@ class DictionaryRef;
 
 #include <QHash>
 #include <QObject>
-#include <QStringList>
+#include <QList>
 
 #include "../../../../lib/src/debug.h"
 
@@ -38,10 +38,10 @@ class DictionaryManager : public QObject
 public:
 	static DictionaryManager& instance();
 
-	QStringList availableDictionaries() const;
+	QList<QString> availableDictionaries() const;
 	QString availableDictionary(const QString& language) const;
 	QString defaultLanguage() const;
-	QStringList personal() const;
+	QList<QString> personal() const;
 
 	void add(const QString& word);
 	void addProviders();
@@ -49,7 +49,7 @@ public:
 	void setDefaultLanguage(const QString& language);
 	void setIgnoreNumbers(bool ignore);
 	void setIgnoreUppercase(bool ignore);
-	void setPersonal(const QStringList& words);
+	void setPersonal(const QList<QString>& words);
 
 	static QString installedPath();
 	static QString path();
@@ -71,7 +71,7 @@ private:
 	AbstractDictionary* m_default_dictionary;
 
 	QString m_default_language;
-	QStringList m_personal;
+	QList<QString> m_personal;
 
 	static QString m_path;
 };
@@ -86,7 +86,7 @@ inline QString DictionaryManager::path()
 	return m_path;
 }
 
-inline QStringList DictionaryManager::personal() const
+inline QList<QString> DictionaryManager::personal() const
 {
 	return m_personal;
 }

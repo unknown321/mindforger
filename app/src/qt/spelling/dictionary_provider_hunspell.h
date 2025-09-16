@@ -20,10 +20,11 @@
 #ifndef DICTIONARY_PROVIDER_HUNSPELL_H
 #define DICTIONARY_PROVIDER_HUNSPELL_H
 
+#include <QList>
+
 #include "abstract_dictionary_provider.h"
 
 class QString;
-class QStringList;
 
 class DictionaryProviderHunspell : public AbstractDictionaryProvider
 {
@@ -35,7 +36,7 @@ public:
 		return true;
 	}
 
-	QStringList availableDictionaries() const;
+	QList<QString> availableDictionaries() const;
 	AbstractDictionary* requestDictionary(const QString& language) const;
 
 	void setIgnoreNumbers(bool ignore);

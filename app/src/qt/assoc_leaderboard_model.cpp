@@ -35,7 +35,7 @@ void AssocLeaderboardModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
         << tr("Associations")
         << tr("%");
@@ -45,7 +45,7 @@ void AssocLeaderboardModel::removeAllRows()
 
 void AssocLeaderboardModel::addRow(Note* note, float associativity)
 {
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
         << (tr("Associations")+(title.size()?tr(" for '")+title+tr("'"):tr("")))
         << tr("%");

@@ -57,7 +57,7 @@ class FindOutlineByNameDialog : public QDialog
 private:
     MyLineEdit* lineEdit;
     QListView* listView;
-    QStringList listViewStrings;
+    QList<QString> listViewStrings;
     QStringListModel listViewModel;
     QCheckBox* caseCheckBox;
     QCheckBox* keywordsCheckBox;

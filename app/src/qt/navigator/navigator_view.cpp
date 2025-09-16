@@ -363,7 +363,7 @@ void NavigatorView::timerEvent(QTimerEvent *event)
 void NavigatorView::wheelEvent(QWheelEvent *event)
 {
     // edge stretching
-    initialEdgeLenght += event->delta()>0?initialEdgeLenght/3:initialEdgeLenght/-3;
+    initialEdgeLenght += event->angleDelta().y()>0?initialEdgeLenght/3:initialEdgeLenght/-3;
     checkAndFixInitialEdgeLength(initialEdgeLenght);
     refreshOnNextTimerTick();
 

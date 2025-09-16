@@ -113,11 +113,12 @@ NoteEditHighlighter::~NoteEditHighlighter()
  */
 void NoteEditHighlighter::addRegex(Type type, const QString &pattern, bool minimal)
 {
-    QRegExp* regex = new QRegExp{pattern};
-    regex->setPatternSyntax(QRegExp::RegExp2);
-    regex->setMinimal(minimal);
+    QRegularExpression* regex = new QRegularExpression(pattern);
+    if (minimal) {
+        regex->setPatternOptions(QRegularExpression::InvertedGreedinessOption);
+    }
 
-    std::pair<Type,QRegExp*>* p = new std::pair<Type,QRegExp*>(type,regex);
+    std::pair<Type, QRegularExpression*>* p = new std::pair<Type, QRegularExpression*>(type, regex);
     typeAndRegex.push_back(p);
 }
 
@@ -162,13 +163,14 @@ void NoteEditHighlighter::highlightPatterns(const QString& text)
     //   O(n) = size(regexps) * lng(text)
     for(auto p:typeAndRegex) {
         Type type = p->first;
-        QRegExp* regex = p->second;
+        QRegularExpression* regex = p->second;
 
         // find 1st match for regex in text
-        int index = regex->indexIn(text);
+        auto match = regex->match(text);
+        int index = match.capturedStart();
         // loop until there are other matches
         while(index > -1) {
-            int length = regex->matchedLength();
+            int length = match.capturedLength();
 
             switch(type) {
             case Bolder:
@@ -219,11 +221,11 @@ void NoteEditHighlighter::highlightPatterns(const QString& text)
             case HtmlAttribute:
                 setFormat(
                     index,
-                    regex->pos(2) - index - 1,
+                    match.capturedStart(2) - index - 1,
                     htmlAttrNameFormat);
                 setFormat(
-                    regex->pos(2) + 1,
-                    regex->cap(2).length() - 2,
+                    match.capturedStart(2) + 1,
+                    match.capturedLength(2) - 2,
                     htmlAttValueFormat);
                 break;
             case HtmlEntity:
@@ -236,7 +238,9 @@ void NoteEditHighlighter::highlightPatterns(const QString& text)
             }
 
             // match again
-            index = regex->indexIn(text, index+length);
+
+            match = regex->match(text, index+length);
+            index = match.capturedStart();
         }
     }
 }
@@ -315,29 +319,23 @@ void NoteEditHighlighter::spellCheck(const QString& text)
             cursorPosInBlock = cursorPosition - cursorPosBlock.position();
         }
 
-        QStringRef misspelledWord = spellCheckDictionary.check(text, 0);
+        QStringView misspelledWord = spellCheckDictionary.check(text, 0);
 
-        while(!misspelledWord.isNull()) {
-            int startIndex = misspelledWord.position();
-            int length = misspelledWord.length();
+        // while(!misspelledWord.isNull()) {
+        //     int startIndex = misspelledWord.position();
+        //     int length = misspelledWord.length();
 
-            if(isTypingPaused || (cursorPosInBlock != (startIndex + length))) {
-                QTextCharFormat spellingErrorFormat = q->format(startIndex);
-                spellingErrorFormat.setUnderlineColor(lookAndFeels.getEditorError());
-                spellingErrorFormat.setUnderlineStyle (
-                    static_cast<QTextCharFormat::UnderlineStyle>(
-                        QApplication::style()->styleHint(
-                            QStyle::SH_SpellCheckUnderlineStyle
-                        )
-                    )
-                );
+        //     if(isTypingPaused || (cursorPosInBlock != (startIndex + length))) {
+        //         QTextCharFormat spellingErrorFormat = q->format(startIndex);
+        //         spellingErrorFormat.setUnderlineColor(lookAndFeels.getEditorError());
+        //         spellingErrorFormat.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
 
-                q->setFormat(startIndex, length, spellingErrorFormat);
-            }
+        //         q->setFormat(startIndex, length, spellingErrorFormat);
+        //     }
 
-            startIndex += length;
-            misspelledWord = spellCheckDictionary.check(text, startIndex);
-        }
+        //     startIndex += length;
+        //     misspelledWord = spellCheckDictionary.check(text, startIndex);
+        // }
     }
 }
 

@@ -92,7 +92,7 @@ void CliView::focusOutEvent(QFocusEvent* event)
  * CLI and breadcrumbs view.
  */
 
-const QStringList CliAndBreadcrumbsView::EMPTY_CMDS = QStringList();
+const QList<QString> CliAndBreadcrumbsView::EMPTY_CMDS = QList<QString>();
 
 // help
 
@@ -110,7 +110,7 @@ const QString CliAndBreadcrumbsView::CMD_HELP_CMD
 const QString CliAndBreadcrumbsView::CMD_HELP_FTS
     = "?     full-text search phrase";
 
-const QStringList CliAndBreadcrumbsView::HELP_CMDS = QStringList()
+const QList<QString> CliAndBreadcrumbsView::HELP_CMDS = QList<QString>()
         << CMD_HELP_HELP
         << CMD_HELP_SEARCH
  //       << CMD_HELP_KNOWLEDGE
@@ -131,7 +131,7 @@ const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_TAG
 const QString CliAndBreadcrumbsView::CMD_FIND_NOTE_BY_TAG
     = "/ find note by tag ";
 
-const QStringList CliAndBreadcrumbsView::HELP_FIND_CMDS = QStringList()
+const QList<QString> CliAndBreadcrumbsView::HELP_FIND_CMDS = QList<QString>()
         << CMD_FIND_OUTLINE_BY_NAME
         << CMD_FIND_OUTLINE_BY_TAG
 //        << CMD_FIND_NOTE_BY_NAME
@@ -153,7 +153,7 @@ const QString CliAndBreadcrumbsView::CMD_TERMINAL
 const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES
     = "> list notebooks";
 
-const QStringList CliAndBreadcrumbsView::HELP_CMD_CMDS = QStringList()
+const QList<QString> CliAndBreadcrumbsView::HELP_CMD_CMDS = QList<QString>()
 //        << CMD_HOME
 //        << CMD_TERMINAL
         << CMD_EMOJIS
@@ -161,7 +161,7 @@ const QStringList CliAndBreadcrumbsView::HELP_CMD_CMDS = QStringList()
         ;
 
 // TODO migrate all commands to constants
-const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
+const QList<QString> CliAndBreadcrumbsView::DEFAULT_CMDS = QList<QString>()
         /*
         << CMD_EXIT
         // home tools
@@ -200,7 +200,7 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     : QWidget(parent),
       zenMode{zenMode}
 {
-    HELP_KNOW_CMDS = QStringList();
+    HELP_KNOW_CMDS = QList<QString>();
     for(const auto& toolName:KnowledgeTool::getToolIds()) {
         HELP_KNOW_CMDS << (CHAR_KNOW + QString::fromStdString(toolName));
     }
@@ -250,7 +250,7 @@ void CliAndBreadcrumbsView::showCli(bool selectAll)
     }
 }
 
-void appendToStandardModel(const QStringList& list, QStandardItemModel* completerModel) {
+void appendToStandardModel(const QList<QString>& list, QStandardItemModel* completerModel) {
     for(const auto& i:list) {
         QStandardItem* item = new QStandardItem(i);
 
@@ -268,7 +268,7 @@ void appendToStandardModel(const QStringList& list, QStandardItemModel* complete
     }
 }
 
-void CliAndBreadcrumbsView::updateCompleterModel(const QStringList& helpList, const QStringList* list)
+void CliAndBreadcrumbsView::updateCompleterModel(const QList<QString>& helpList, const QList<QString>* list)
 {
     QStandardItemModel* completerModel=(QStandardItemModel*)cliCompleter->model();
     if(completerModel==nullptr) {

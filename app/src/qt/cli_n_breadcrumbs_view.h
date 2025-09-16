@@ -67,14 +67,14 @@ private:
     CliView* cli;
     QCompleter* cliCompleter;
 
-    QStringList cliCompleterHistoryList;
+    QList<QString> cliCompleterHistoryList;
 
     bool zenMode;
 
 public:
-    static const QStringList DEFAULT_CMDS; // TODO remove
+    static const QList<QString> DEFAULT_CMDS; // TODO remove
 
-    static const QStringList EMPTY_CMDS;
+    static const QList<QString> EMPTY_CMDS;
 
     // help
 
@@ -87,7 +87,7 @@ public:
     static const QString CMD_HELP_CHAT;
     static const QString CMD_HELP_FTS;
 
-    static const QStringList HELP_CMDS;
+    static const QList<QString> HELP_CMDS;
 
     // search
 
@@ -98,13 +98,13 @@ public:
     static const QString CMD_FIND_NOTE_BY_NAME;
     static const QString CMD_FIND_NOTE_BY_TAG;
 
-    static const QStringList HELP_FIND_CMDS;
+    static const QList<QString> HELP_FIND_CMDS;
 
     // knowledge
 
     static const QString CHAR_KNOW;
 
-    QStringList HELP_KNOW_CMDS;
+    QList<QString> HELP_KNOW_CMDS;
 
     // command
 
@@ -115,7 +115,7 @@ public:
     static const QString CMD_TERMINAL;
     static const QString CMD_LIST_OUTLINES;
 
-    static const QStringList HELP_CMD_CMDS;
+    static const QList<QString> HELP_CMD_CMDS;
 
     // chat
 
@@ -132,7 +132,7 @@ public:
     void addCompleterItem(const QString& item) {
         cliCompleterHistoryList.insert(0, item);
     }
-    void updateCompleterModel(const QStringList& helpList, const QStringList* list=nullptr);
+    void updateCompleterModel(const QList<QString>& helpList, const QList<QString>* list=nullptr);
     void forceFtsHistoryCompletion();
     QString getFirstCompletion() const;
     void setBreadcrumbPath(const QString& path);

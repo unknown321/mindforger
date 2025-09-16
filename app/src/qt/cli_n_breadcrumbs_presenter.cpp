@@ -111,7 +111,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     // switch suggestions model
                     vector<string> outlineNames;
                     mind->getOutlineNames(outlineNames);
-                    QStringList outlineNamesCompletion = QStringList();
+                    QList<QString> outlineNamesCompletion = QList<QString>();
                     if(outlineNames.size()) {
                         QString qs;
                         for(const string& s:outlineNames) {

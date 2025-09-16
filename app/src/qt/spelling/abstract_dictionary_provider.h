@@ -20,10 +20,11 @@
 #ifndef ABSTRACT_DICTIONARY_PROVIDER_H
 #define ABSTRACT_DICTIONARY_PROVIDER_H
 
+#include <QList>
+
 class AbstractDictionary;
 
 class QString;
-class QStringList;
 
 class AbstractDictionaryProvider
 {
@@ -31,7 +32,7 @@ public:
 	virtual ~AbstractDictionaryProvider() { }
 
 	virtual bool isValid() const = 0;
-	virtual QStringList availableDictionaries() const = 0;
+	virtual QList<QString> availableDictionaries() const = 0;
 	virtual AbstractDictionary* requestDictionary(const QString& language) const = 0;
 
 	virtual void setIgnoreNumbers(bool ignore) = 0;

@@ -52,7 +52,7 @@ private:
     void updateMenu();
 
 private:
-    QStringList recentFiles;
+    QList<QString> recentFiles;
 };
 
 }

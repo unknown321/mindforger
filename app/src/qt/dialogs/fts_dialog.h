@@ -59,7 +59,7 @@ private:
     Outline* scope;
 
 protected:
-    QStringList completerStrings;
+    QList<QString> completerStrings;
 
     QCompleter* completer;
     QLabel* label;

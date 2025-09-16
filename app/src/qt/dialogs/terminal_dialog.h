@@ -61,7 +61,7 @@ class TerminalDialog : public QDialog
 private:
     MyLineEdit* cmdEdit;
     QCompleter* cmdCompleter;
-    QStringList completerCommands;
+    QList<QString> completerCommands;
 
     QTextEdit* terminalWindow;
 

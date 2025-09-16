@@ -108,7 +108,7 @@ void InsertImageDialog::handleFindFile()
     fileDialog.setDirectory(homeDirectory);
     fileDialog.setViewMode(QFileDialog::Detail);
 
-    QStringList imageFileNames{};
+    QList<QString> imageFileNames{};
     if(fileDialog.exec()) {
         imageFileNames = fileDialog.selectedFiles();
         if(imageFileNames.size()==1) {

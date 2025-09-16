@@ -31,7 +31,7 @@ void NotesTableModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
             << tr("Note")
             << tr("Notebook");

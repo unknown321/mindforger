@@ -38,7 +38,7 @@ QString stringFormatIntAsUs(int i)
 bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseSensitive)
 {
     if(keywords.size()) {
-        QStringList ks = keywords.split(" ");
+        QList<QString> ks = keywords.split(" ");
         if(ks.size()) {
             Qt::CaseSensitivity c = caseSensitive?Qt::CaseInsensitive:Qt::CaseSensitive;
             for(QString& k:ks) {

@@ -33,7 +33,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef DO_MF_DEBUG
     actionMindHack = new QAction(tr("Mind Hack"), mainWindow);
     actionMindHack->setStatusTip(tr("Mind hacking and debugging hook"));
-    actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Z));
+    actionMindHack->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Z));
 #endif
 
     // new/devise... new Workspaces (MD repository)
@@ -104,17 +104,17 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_MD_2_HTML_CMARK
     actionMindAutolink->setCheckable(true);
     actionMindAutolink->setStatusTip(tr("Automatically inject links to relevant Notebooks and Notes when browsing HTML preview"));
-    actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_L));
+    actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_L));
 #else
     actionMindAutolink->setVisible(false);
 #endif
 
     actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"), mainWindow);
-    actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
+    actionMindWingman->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Slash));
     actionMindWingman->setStatusTip(tr("Open Wingman dialog..."));
 
     actionMindTool = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Find on Web"), mainWindow);
-    actionMindTool->setShortcut(QKeySequence(Qt::ALT+Qt::Key_1));
+    actionMindTool->setShortcut(QKeySequence(Qt::ALT | Qt::Key_1));
     actionMindTool->setStatusTip(tr("Find Notebook or Note name; selected text or text under cursor on the web..."));
 
     // scope ... don't show any N/O older than 1Y/3M/...
@@ -175,7 +175,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuMindExport->addAction(actionMindExportCsv);
 
     actionExit = new QAction(QIcon(":/menu-icons/exit.svg"), tr("E&xit"), mainWindow);
-    actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
+    actionExit->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
     actionExit->setStatusTip(tr("Leave application"));
 
     menuMind->addMenu(submenuMindNew);
@@ -209,36 +209,36 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionFindFts = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Full-text Search"), mainWindow);
 #ifdef __APPLE__
-    actionFindFts->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    actionFindFts->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F));
 #else
-    actionFindFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
+    actionFindFts->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F));
 #endif
     actionFindFts->setStatusTip(tr("Note full-text search"));
 
     actionFindOutlineByName = new QAction(
         QIcon(":/menu-icons/find.svg"), tr("Recall Note&book by Name"), mainWindow);
-    actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
+    actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
     actionFindOutlineByName->setStatusTip(tr("Find Notebook by name"));
 
     actionFindNoteByName = new QAction(
         QIcon(":/menu-icons/find.svg"), tr("Recall &Note by Name"), mainWindow);
-    actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
+    actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_N));
     actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
     actionFindOutlineByTag = new QAction(
         QIcon(":/menu-icons/find.svg"), tr("Recall Notebook by Ta&gs"), mainWindow);
-    actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_X));
+    actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_X));
     actionFindOutlineByTag->setStatusTip(tr("Find Notebook by tags"));
 
     actionFindNoteByTag = new QAction(
         QIcon(":/menu-icons/find.svg"), tr("Recall Note by T&ags"), mainWindow);
-    actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
+    actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_A));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
 #ifdef MF_WIP
     actionFindDocByName = new QAction(
         QIcon(":/menu-icons/find.svg"), tr("Recall Library &Doc by Name"), mainWindow);
-    actionFindDocByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
+    actionFindDocByName->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
     actionFindDocByName->setStatusTip(tr("Find Document by name"));
 #endif
 
@@ -255,37 +255,37 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: view
 
     actionViewHome = new QAction(QIcon(":/menu-icons/home.svg"), tr("&Home Notebook"), mainWindow);
-    actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
+    actionViewHome->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
     actionViewDecks = new QAction(QIcon(":/menu-icons/tag.svg"), tr("Flashcard &Decks"), mainWindow);
-    actionViewDecks->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
+    actionViewDecks->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
     actionViewDecks->setStatusTip(tr("Show list of flashcard decks..."));
 
     actionViewOrganizers = new QAction(QIcon(":/menu-icons/cross.svg"), tr("Organiz&ers"), mainWindow);
-    actionViewOrganizers->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
+    actionViewOrganizers->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E));
     actionViewOrganizers->setStatusTip(tr("Open Eisenhower matrix and Kanban organizers..."));
 
     actionViewOutlines = new QAction(QIcon(":/menu-icons/list-text.svg"), tr("N&otebooks"), mainWindow);
-    actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
+    actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
     actionViewOutlinesMap = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Note&books Tree"), mainWindow);
-    actionViewOutlinesMap->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    actionViewOutlinesMap->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T));
     actionViewOutlinesMap->setStatusTip(tr("Show tree of Notebooks..."));
 
 #ifdef MF_WIP
     actionViewLibraryDocs = new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Library Documents"), mainWindow);
     actionViewLibraryDocs->setStatusTip(tr("List Library documents..."));
-    //actionViewLibraryDocs->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_<REPLACE>));
+    //actionViewLibraryDocs->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_<REPLACE>));
 #endif
 
     actionViewTags = new QAction(QIcon(":/menu-icons/tag.svg"), tr("&Tags"), mainWindow);
-    actionViewTags->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_G));
+    actionViewTags->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_G));
     actionViewTags->setStatusTip(tr("Open Tag cloud..."));
 
     actionViewNavigator = new QAction(QIcon(":/menu-icons/grid.svg"), tr("Knowledge Graph &Navigator"), mainWindow);
-    actionViewNavigator->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
+    actionViewNavigator->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_K));
     actionViewNavigator->setStatusTip(tr("Open knowledge graph Navigator..."));
 
     actionViewDwell = new QAction(tr("&Memory Dwell"), mainWindow);
@@ -293,7 +293,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell->setEnabled(false);
 
     actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&CLI"), mainWindow);
-    actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
+    actionViewCli->setShortcut(QKeySequence(Qt::ALT | Qt::Key_X));
     actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
     actionViewTerminal = new QAction(
@@ -309,7 +309,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
         mainWindow
     );
     actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
-    actionViewRecentNotes->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
+    actionViewRecentNotes->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
 
     actionViewStencils = new QAction(
         QIcon(":/menu-icons/stencil.svg"), tr("&Stencils"), mainWindow);
@@ -328,7 +328,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
         QIcon(":/menu-icons/hoisting.svg"), tr("Ho&ist"), mainWindow);
     actionViewHoist->setCheckable(true);
     actionViewHoist->setChecked(false);
-    actionViewHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
+    actionViewHoist->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I));
     actionViewHoist->setStatusTip(
         tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
@@ -502,13 +502,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
 #ifdef __APPLE__
-    actionOutlineNew->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+    actionOutlineNew->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_B));
 #endif
 
 
 #ifdef __APPLE__
     actionOutlineEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
-    actionOutlineEdit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
+    actionOutlineEdit->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_E));
 #else
     actionOutlineEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
 #endif
@@ -610,7 +610,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
 #ifdef __APPLE__
     actionNoteNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
-    actionNoteNew->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+    actionNoteNew->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
 #else
     actionNoteNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
 #endif
@@ -618,7 +618,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
 #ifdef __APPLE__
     actionNoteEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
-    actionNoteEdit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
+    actionNoteEdit->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_E));
 #else
     actionNoteEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit\tCtrl+E"), mainWindow);
 #endif
@@ -767,7 +767,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionEditLiveNotePreview = new QAction(QIcon(":/menu-icons/preview.svg"), tr("&Live Preview"), mainWindow);
     actionEditLiveNotePreview->setCheckable(true);
-    actionEditLiveNotePreview->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
+    actionEditLiveNotePreview->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_P));
     actionEditLiveNotePreview->setStatusTip(tr("Toggle live HTML preview"));
 
     actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("W&ord Wrap"), mainWindow);
@@ -832,19 +832,19 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatBold = new QAction(tr("&Bold"), mainWindow);
     actionFormatBold->setStatusTip(tr("Format text as bold"));
 #ifdef __APPLE__
-    actionFormatBold->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+    actionFormatBold->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_B));
 #endif
 
     actionFormatItalic = new QAction(tr("&Italic"), mainWindow);
     actionFormatItalic->setStatusTip(tr("Format text as italic"));
 #ifdef __APPLE__
-    actionFormatItalic->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
+    actionFormatItalic->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
 #endif
 
     actionFormatCode = new QAction(tr("&Code"), mainWindow);
     actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
 #ifdef __APPLE__
-    actionFormatCode->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
+    actionFormatCode->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
 #endif
 
     actionFormatMath = new QAction(tr("&Math"), mainWindow);
@@ -991,13 +991,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatLink = new QAction(tr("&Link"), mainWindow);
     actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
 #ifdef __APPLE__
-    actionFormatLink->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_K));
+    actionFormatLink->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_K));
 #endif
 
     actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
     actionFormatImage->setStatusTip(tr("Insert image"));
 #ifdef __APPLE__
-    actionFormatImage->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_M));
+    actionFormatImage->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
 #endif
 
     actionFormatTable = new QAction(tr("Tabl&es"), mainWindow);

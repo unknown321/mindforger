@@ -50,7 +50,7 @@ public:
 
     void setTitle(QString& title) {
         this->title = title;
-        QStringList tableHeader = {this->title};
+        QList<QString> tableHeader = {this->title};
         setHorizontalHeaderLabels(tableHeader);
     }
 

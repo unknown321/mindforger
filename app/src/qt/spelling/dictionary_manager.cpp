@@ -31,6 +31,7 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+#include <QRegularExpression>
 
 #include <algorithm>
 
@@ -59,17 +60,17 @@ public:
 		return true;
 	}
 
-	QStringRef check(const QString& string, int start_at) const
+    QStringView check(const QString& string, int start_at) const
 	{
 		Q_UNUSED(string);
 		Q_UNUSED(start_at);
-		return QStringRef();
+        return QStringView();
 	}
 
-	QStringList suggestions(const QString& word) const
+	QList<QString> suggestions(const QString& word) const
 	{
 		Q_UNUSED(word);
-		return QStringList();
+		return QList<QString>();
 	}
 
 	void addToPersonal(const QString& word)
@@ -77,12 +78,12 @@ public:
 		Q_UNUSED(word);
 	}
 
-	void addToSession(const QStringList& words)
+	void addToSession(const QList<QString>& words)
 	{
 		Q_UNUSED(words);
 	}
 
-	void removeFromSession(const QStringList& words)
+	void removeFromSession(const QList<QString>& words)
 	{
 		Q_UNUSED(words);
 	}
@@ -107,9 +108,9 @@ DictionaryManager& DictionaryManager::instance()
 
 //-----------------------------------------------------------------------------
 
-QStringList DictionaryManager::availableDictionaries() const
+QList<QString> DictionaryManager::availableDictionaries() const
 {
-	QStringList result;
+	QList<QString> result;
 	foreach (AbstractDictionaryProvider* provider, m_providers) {
 		result += provider->availableDictionaries();
 	}
@@ -122,9 +123,9 @@ QStringList DictionaryManager::availableDictionaries() const
 
 QString DictionaryManager::availableDictionary(const QString& language) const
 {
-	QStringList languages = availableDictionaries();
+	QList<QString> languages = availableDictionaries();
 	if (!languages.isEmpty() && !languages.contains(language)) {
-		int close = languages.indexOf(QRegExp(language.left(2) + ".*"));
+        int close = languages.indexOf(QRegularExpression(language.left(2) + ".*"));
 		return (close != -1) ? languages.at(close) : (languages.contains("en_US") ? "en_US" : languages.first());
 	} else {
 		return language;
@@ -135,7 +136,7 @@ QString DictionaryManager::availableDictionary(const QString& language) const
 
 void DictionaryManager::add(const QString& word)
 {
-	QStringList words = personal();
+	QList<QString> words = personal();
     if (words.contains(word)) {
 		return;
 	}
@@ -255,10 +256,10 @@ void DictionaryManager::setPath(const QString& path)
 
 //-----------------------------------------------------------------------------
 
-void DictionaryManager::setPersonal(const QStringList& words)
+void DictionaryManager::setPersonal(const QList<QString>& words)
 {
 	// Check if new
-    QStringList personal = words;
+    QList<QString> personal = words;
 	std::sort(personal.begin(), personal.end(), compareWords);
 	if (personal == m_personal) {
 		return;
@@ -278,7 +279,7 @@ void DictionaryManager::setPersonal(const QStringList& words)
     );
 	if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 		QTextStream stream(&file);
-		stream.setCodec("UTF-8");
+        stream.setEncoding(QStringConverter::Utf8);
 		foreach (const QString& word, m_personal) {
 			stream << word << "\n";
 		}
@@ -307,7 +308,7 @@ DictionaryManager::DictionaryManager()
     );
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		QTextStream stream(&file);
-		stream.setCodec("UTF-8");
+        stream.setEncoding(QStringConverter::Utf8);
 		while (!stream.atEnd()) {
 			m_personal.append(stream.readLine());
 		}

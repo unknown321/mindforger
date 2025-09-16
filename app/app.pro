@@ -69,7 +69,7 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
 # - webengine on Windows and macOS
 win32|macx|mfwebengine {
     DEFINES += MF_QT_WEB_ENGINE
-    QT += webengine
+    QT += webenginecore
     QT += webenginewidgets
 } else {
     QT += webkit

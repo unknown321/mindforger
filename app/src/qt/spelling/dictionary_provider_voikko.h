@@ -20,10 +20,11 @@
 #ifndef DICTIONARY_PROVIDER_VOIKKO_H
 #define DICTIONARY_PROVIDER_VOIKKO_H
 
+#include <QList>
+
 #include "abstract_dictionary_provider.h"
 
 class QString;
-class QStringList;
 
 class DictionaryProviderVoikko : public AbstractDictionaryProvider
 {
@@ -31,7 +32,7 @@ public:
 	DictionaryProviderVoikko();
 
 	bool isValid() const;
-	QStringList availableDictionaries() const;
+	QList<QString> availableDictionaries() const;
 	AbstractDictionary* requestDictionary(const QString& language) const;
 
 	void setIgnoreNumbers(bool ignore);

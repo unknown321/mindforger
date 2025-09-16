@@ -221,14 +221,14 @@ int main(int argc, char* argv[])
                  "MindForger workspace or directory/file with Markdown(s) to open"
             )
         );
-        QCommandLineOption themeOption(QStringList() << "t" << "theme",
+        QCommandLineOption themeOption(QList<QString>() << "t" << "theme",
             QCoreApplication::translate(
                 "main", "Use 'dark', 'light' or other GUI <theme>."
             ),
             QCoreApplication::translate("main", "theme")
         );
         parser.addOption(themeOption);
-        QCommandLineOption configPathOption(QStringList() << "c" << "config-file-path",
+        QCommandLineOption configPathOption(QList<QString>() << "c" << "config-file-path",
             QCoreApplication::translate(
                 "main", "Load configuration from given <file>."
             ),
@@ -238,31 +238,31 @@ int main(int argc, char* argv[])
 
      #if defined(__APPLE__) || defined(_WIN32)
         // command line options which might be passed to WebEngine to control the security
-        QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
+        QCommandLineOption macosDisableSecurityOption(QList<QString>() << "S" << "disable-web-security",
             QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS.")
         );
         parser.addOption(macosDisableSecurityOption);
 
       #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        QCommandLineOption macosSingleProcess(QStringList() << "P" << "single-process",
+        QCommandLineOption macosSingleProcess(QList<QString>() << "P" << "single-process",
             QCoreApplication::translate("main", "Disable WebEngine security by running single process on macOS.")
         );
         parser.addOption(macosSingleProcess);
-        QCommandLineOption macosNoSandbox(QStringList() << "N" << "no-sandbox",
+        QCommandLineOption macosNoSandbox(QList<QString>() << "N" << "no-sandbox",
             QCoreApplication::translate("main", "Disable WebEngine security by disabling sandbox on macOS.")
         );
         parser.addOption(macosNoSandbox);
-        QCommandLineOption macosUserDataDir(QStringList() << "U" << "user-data-dir",
+        QCommandLineOption macosUserDataDir(QList<QString>() << "U" << "user-data-dir",
             QCoreApplication::translate("main", "Disable WebEngine security by user data dir specification on macOS."),
             QCoreApplication::translate("main", "file")
 
         );
         parser.addOption(macosUserDataDir);
-        QCommandLineOption macosSiteIsolation(QStringList() << "I" << "disable-site-isolation-trials",
+        QCommandLineOption macosSiteIsolation(QList<QString>() << "I" << "disable-site-isolation-trials",
             QCoreApplication::translate("main", "Disable WebEngine security via site isolation trials on macOS.")
         );
         parser.addOption(macosSiteIsolation);
-        QCommandLineOption macosAcessFileFromFile(QStringList() << "F" << "allow-file-access-from-files",
+        QCommandLineOption macosAcessFileFromFile(QList<QString>() << "F" << "allow-file-access-from-files",
             QCoreApplication::translate("main", "Disable WebEngine security via acess file from file on macOS.")
         );
         parser.addOption(macosAcessFileFromFile);
@@ -278,7 +278,7 @@ int main(int argc, char* argv[])
             return 0;
         }
 
-        QStringList arguments = parser.positionalArguments();
+        QList<QString> arguments = parser.positionalArguments();
 
         if(arguments.size()==1) {
             useRepository.assign(arguments[0].toStdString());
@@ -413,7 +413,7 @@ int main(int argc, char* argv[])
     searchDirPath += "dictionaries";
     searchDirPaths.push_back(searchDirPath);
     // search paths assembly
-    QStringList spellCheckDictionaryDirs{};
+    QList<QString> spellCheckDictionaryDirs{};
     MF_DEBUG("  Adding dirs to search path:" << endl);
     for(auto d:searchDirPaths) {
         MF_DEBUG("    " << d << endl);
@@ -432,7 +432,7 @@ int main(int argc, char* argv[])
     // so that it can be enabled later OR dictionaries how to can be provided
     DictionaryManager::instance().addProviders();
     // ^ load available standard dictionaries
-    QStringList languages = DictionaryManager::instance().availableDictionaries();
+    QList<QString> languages = DictionaryManager::instance().availableDictionaries();
     MF_DEBUG("  Available language dictionaries:" << endl);
     // set the default dictionary language
     if(languages.size()) {
@@ -511,7 +511,8 @@ int main(int argc, char* argv[])
     mainWindowPresenter.showInitialView();
     mainWindowView.showMaximized();
 #else
-    mainWindowView.showMaximized();
+    mainWindowView.show();
+    // mainWindowView.showMaximized();
     mindforgerApplication.font().setPointSize(config.getUiFontPointSize());
     mainWindowPresenter.showInitialView();
 #endif

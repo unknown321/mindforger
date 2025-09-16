@@ -71,7 +71,7 @@ private:
 	bool m_loop_available;
 
 	QString m_word;
-	QStringList m_ignored;
+	QList<QString> m_ignored;
 };
 
 #endif

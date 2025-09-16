@@ -33,7 +33,7 @@ void OutlinesTableModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
         << tr("Notebooks")
         << tr("Importance")
@@ -81,7 +81,7 @@ void OutlinesTableModel::addRow(Outline* outline)
     s.clear();
     // stupid and ugly: correct sorting is ensured by making appropriate HTML (alpha sort), don't know how to sort using data role
     s += "<div title='";
-    s += outline->getImportance();
+    s += QChar(outline->getImportance());
     s += "'>";
     if(outline->getImportance() > 0) {
         for(int i=0; i<=4; i++) {

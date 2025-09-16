@@ -37,7 +37,7 @@ void OutlinesMapModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
             << tr("Notebooks Tree") // tree of Notebooks ~ mind map of Notebooks
             << tr("Done")

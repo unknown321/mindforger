@@ -356,7 +356,7 @@ void ConfigurationDialog::ViewerTab::slotFindCssFile()
     fileDialog.setDirectory(homeDirectory);
     fileDialog.setViewMode(QFileDialog::Detail);
 
-    QStringList fileNames{};
+    QList<QString> fileNames{};
     if(fileDialog.exec()) {
         fileNames = fileDialog.selectedFiles();
         if(fileNames.size()==1) {

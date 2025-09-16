@@ -246,7 +246,7 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
 
     // Terminal green: QColor(0, 140, 0)
     // Terminal blue : QColor(42, 130, 218)
-    palette.setColor(QPalette::Foreground, Qt::red);
+    palette.setColor(QPalette::WindowText, Qt::red);
     palette.setColor(QPalette::Shadow, Qt::magenta);
     palette.setColor(QPalette::BrightText, Qt::green);
     palette.setColor(QPalette::Light, Qt::blue);

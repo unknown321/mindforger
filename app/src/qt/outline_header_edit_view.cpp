@@ -40,25 +40,25 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
     // signals
 #ifdef __APPLE__
     new QShortcut(
-        QKeySequence(Qt::CTRL+Qt::Key_D),
+        QKeySequence(Qt::CTRL | Qt::Key_D),
         this, SLOT(slotSaveAndCloseEditor()));
 #else
     new QShortcut(
-        QKeySequence(Qt::ALT+Qt::Key_Left),
+        QKeySequence(Qt::ALT | Qt::Key_Left),
         this, SLOT(slotSaveAndCloseEditor()));
 #endif
     new QShortcut(
-        QKeySequence(Qt::CTRL+Qt::Key_G),
+        QKeySequence(Qt::CTRL | Qt::Key_G),
         this, SLOT(slotCloseEditor()));
     new QShortcut(
 #if __APPLE__
-        QKeySequence(Qt::CTRL+Qt::Key_Return),
+        QKeySequence(Qt::CTRL | Qt::Key_Return),
 #else
-        QKeySequence(Qt::ALT+Qt::Key_Return),
+        QKeySequence(Qt::ALT | Qt::Key_Return),
 #endif
         this, SLOT(slotOpenOutlineHeaderPropertiesEditor()));
     new QShortcut(
-        QKeySequence(Qt::CTRL+Qt::Key_S),
+        QKeySequence(Qt::CTRL | Qt::Key_S),
         this, SLOT(slotSaveOutlineHeader()));
     QObject::connect(
         bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),

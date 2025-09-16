@@ -37,7 +37,7 @@ void RecentNotesTableModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
         << tr("Recent Notes")
         << tr("Notebook")

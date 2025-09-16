@@ -27,8 +27,8 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QLibrary>
-#include <QStringList>
-#include <QStringRef>
+#include <QList>
+#include <QStringView>
 
 //-----------------------------------------------------------------------------
 
@@ -87,12 +87,12 @@ public:
 		return m_handle;
 	}
 
-	QStringRef check(const QString& string, int start_at) const;
-	QStringList suggestions(const QString& word) const;
+    QStringView check(const QString& string, int start_at) const;
+	QList<QString> suggestions(const QString& word) const;
 
 	void addToPersonal(const QString& word);
-	void addToSession(const QStringList& words);
-	void removeFromSession(const QStringList& words);
+	void addToSession(const QList<QString>& words);
+	void removeFromSession(const QList<QString>& words);
 
 private:
 	VoikkoHandle* m_handle;
@@ -126,7 +126,7 @@ DictionaryVoikko::~DictionaryVoikko()
 
 //-----------------------------------------------------------------------------
 
-QStringRef DictionaryVoikko::check(const QString& string, int start_at) const
+QStringView DictionaryVoikko::check(const QString& string, int start_at) const
 {
 	int index = -1;
 	int length = 0;
@@ -144,7 +144,7 @@ QStringRef DictionaryVoikko::check(const QString& string, int start_at) const
 			}
 			length += chars;
 			chars = 1;
-		} else if (c != 0x2019 && c != 0x0027) {
+        } else if (c != QChar(0x2019) && c != QChar(0x0027)) {
 			if (index != -1) {
 				is_word = true;
 			}
@@ -153,7 +153,7 @@ QStringRef DictionaryVoikko::check(const QString& string, int start_at) const
 		}
 
 		if (is_word || (i == count && index != -1)) {
-			QStringRef check(&string, index, length);
+            auto check = QStringView(string).sliced(index, length);
 			if (voikkoSpellCstr(m_handle, check.toString().toUtf8().constData()) != VOIKKO_SPELL_OK) {
 				return check;
 			}
@@ -162,14 +162,14 @@ QStringRef DictionaryVoikko::check(const QString& string, int start_at) const
 		}
 	}
 
-	return QStringRef();
+    return QStringView();
 }
 
 //-----------------------------------------------------------------------------
 
-QStringList DictionaryVoikko::suggestions(const QString& word) const
+QList<QString> DictionaryVoikko::suggestions(const QString& word) const
 {
-	QStringList result;
+	QList<QString> result;
 	char** suggestions = voikkoSuggestCstr(m_handle, word.toUtf8().constData());
 	if (suggestions) {
 		for (size_t i = 0; suggestions[i] != NULL; ++i) {
@@ -190,7 +190,7 @@ void DictionaryVoikko::addToPersonal(const QString& word)
 
 //-----------------------------------------------------------------------------
 
-void DictionaryVoikko::addToSession(const QStringList& words)
+void DictionaryVoikko::addToSession(const QList<QString>& words)
 {
 	Q_UNUSED(words);
 	// No personal word list support in voikko?
@@ -198,7 +198,7 @@ void DictionaryVoikko::addToSession(const QStringList& words)
 
 //-----------------------------------------------------------------------------
 
-void DictionaryVoikko::removeFromSession(const QStringList& words)
+void DictionaryVoikko::removeFromSession(const QList<QString>& words)
 {
 	Q_UNUSED(words);
 	// No personal word list support in voikko?
@@ -216,7 +216,7 @@ DictionaryProviderVoikko::DictionaryProviderVoikko()
 
 	QString lib = "libvoikko";
 #ifdef Q_OS_WIN
-	QStringList dictdirs = QDir::searchPaths("dict");
+	QList<QString> dictdirs = QDir::searchPaths("dict");
 	foreach (const QString dictdir, dictdirs) {
 		lib = dictdir + "/libvoikko-1.dll";
 		if (QLibrary(lib).load()) {
@@ -264,13 +264,13 @@ bool DictionaryProviderVoikko::isValid() const
 
 //-----------------------------------------------------------------------------
 
-QStringList DictionaryProviderVoikko::availableDictionaries() const
+QList<QString> DictionaryProviderVoikko::availableDictionaries() const
 {
 	if (!f_voikko_loaded) {
-		return QStringList();
+		return QList<QString>();
 	}
 
-	QStringList result;
+	QList<QString> result;
 	char** languages = voikkoListSupportedSpellingLanguages(f_voikko_path.constData());
 	if (languages) {
 		for (size_t i = 0; languages[i] != NULL; ++i) {

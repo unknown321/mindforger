@@ -23,18 +23,18 @@
 #include "abstract_dictionary.h"
 class DictionaryManager;
 
-#include <QStringList>
-#include <QStringRef>
+#include <QList>
+#include <QStringView>
 
 class DictionaryRef
 {
 public:
-	QStringRef check(const QString& string, int start_at) const
+    QStringView check(const QString& string, int start_at) const
 	{
 		return (*d)->check(string, start_at);
 	}
 
-	QStringList suggestions(const QString& word) const
+    QList<QString> suggestions(const QString& word) const
 	{
 		return (*d)->suggestions(word);
 	}

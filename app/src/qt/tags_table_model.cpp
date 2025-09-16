@@ -37,7 +37,7 @@ void TagsTableModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
         << tr("Tags")
         << tr("Ts");

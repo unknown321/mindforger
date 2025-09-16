@@ -102,7 +102,7 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     );
     // shortcut signals
     new QShortcut(
-        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_L)),
+        QKeySequence(QKeySequence(Qt::CTRL | Qt::Key_L)),
         this, SLOT(slotStartLinkCompletion())
     );
 
@@ -437,14 +437,14 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 };
                 QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
 #ifdef __APPLE__
-                yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+                yes->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y));
                 yes->setToolTip("⌘Y");
 
                 QPushButton* no =
 #endif
                 msgBox.addButton("&No", QMessageBox::NoRole);
 #ifdef __APPLE__
-                no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+                no->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
                 no->setToolTip("⌘N");
 #endif
                 msgBox.exec();
@@ -622,7 +622,7 @@ void NoteEditorView::slotPerformLinkCompletion(
 
     if(!links->empty()) {
         // populate model for links
-        QStringList linksAsStrings{};
+        QList<QString> linksAsStrings{};
         for(string& s:*links) {
             linksAsStrings.append(QString::fromStdString(s));
         }
@@ -648,7 +648,7 @@ void NoteEditorView::slotPerformLinkCompletion(
 
 void NoteEditorView::populateModel(const QString& completionPrefix)
 {
-    QStringList strings = toPlainText().split(QRegExp{"\\W+"});
+    QList<QString> strings = toPlainText().split(QRegularExpression{"\\W+"});
 
     strings.removeAll(completionPrefix);
     strings.removeDuplicates();
@@ -735,7 +735,7 @@ int NoteEditorView::lineNumberPanelWidth()
             max /= 10;
             ++digits;
         }
-        int space = 3 + fontMetrics().width(QLatin1Char{'9'}) * digits;
+        int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char{'9'}) * digits;
         return space;
     } else {
         return 0;
@@ -906,10 +906,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
             this->cursorForWord = cursorForPosition(contextEvent->pos());
         }
 
-        QTextCharFormat::UnderlineStyle spellingErrorUnderlineStyle =
-            static_cast<QTextCharFormat::UnderlineStyle>(
-                QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)
-            );
+        QTextCharFormat::UnderlineStyle spellingErrorUnderlineStyle = QTextCharFormat::SpellCheckUnderline;
 
         // get the formatting for the cursor position under the mouse,
         // and see if it has the spell check error underline style
@@ -962,7 +959,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         );
 
         this->wordUnderMouse = this->cursorForWord.selectedText();
-        QStringList suggestions = spellCheckDictionary.suggestions(this->wordUnderMouse);
+        QList<QString> suggestions = spellCheckDictionary.suggestions(this->wordUnderMouse);
         QMenu* popupMenu = createStandardContextMenu();
         QAction* firstAction = popupMenu->actions().first();
 

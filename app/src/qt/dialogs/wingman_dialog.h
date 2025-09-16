@@ -82,7 +82,7 @@ private:
 
     MyLineEdit* cmdEdit;
     QCompleter* cmdCompleter;
-    QStringList completerCommands;
+    QList<QString> completerCommands;
 
     QComboBox* predefinedPromptsCombo;
 

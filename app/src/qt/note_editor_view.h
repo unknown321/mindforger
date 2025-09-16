@@ -29,6 +29,8 @@
 #include "status_bar_view.h"
 #include "spelling/spell_checker.h"
 
+#include <QList>
+
 namespace m8r {
 
 class LineNumberPanel;

@@ -173,7 +173,7 @@ SpellChecker::SpellChecker(QPlainTextEdit* document, QSyntaxHighlighter* spellin
 
 	// Lay out dialog
 	QGridLayout* layout = new QGridLayout(this);
-	layout->setMargin(12);
+    layout->setContentsMargins(12, 12, 12, 12);
 	layout->setSpacing(6);
 	layout->setColumnMinimumWidth(2, 6);
 
@@ -217,7 +217,7 @@ void SpellChecker::check()
 
 		// Check current line
 		QTextBlock block = m_cursor.block();
-		QStringRef word =  m_dictionary.check(block.text(), m_cursor.position() - block.position());
+        QStringView word =  m_dictionary.check(block.text(), m_cursor.position() - block.position());
 		if (word.isNull()) {
 			if (block.next().isValid()) {
                 m_cursor.movePosition(QTextCursor::NextBlock);
@@ -245,7 +245,8 @@ void SpellChecker::check()
 		}
 
 		// Select misspelled word
-		m_cursor.setPosition(word.position() + block.position());
+        auto position = 0; // word.position()
+        m_cursor.setPosition(position + block.position());
 		m_cursor.setPosition(m_cursor.position() + word.length(), QTextCursor::KeepAnchor);
 		m_word = m_cursor.selectedText();
 
@@ -270,7 +271,7 @@ void SpellChecker::check()
 			// Show suggestions
 			m_suggestion->clear();
 			m_suggestions->clear();
-			QStringList words = m_dictionary.suggestions(m_word);
+			QList<QString> words = m_dictionary.suggestions(m_word);
 			if (!words.isEmpty()) {
 				foreach (const QString& word, words) {
 					m_suggestions->addItem(word);

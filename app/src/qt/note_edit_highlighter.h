@@ -92,7 +92,7 @@ private:
     QTextCharFormat htmlCommentFormat;
 
     // well defined order of regexps MATTERS - hashes/maps CANNOT be used
-    std::vector<std::pair<Type,QRegExp*>*> typeAndRegex;
+    std::vector<std::pair<Type,QRegularExpression*>*> typeAndRegex;
 
 public:
     explicit NoteEditHighlighter(QPlainTextEdit* noteEditorView);

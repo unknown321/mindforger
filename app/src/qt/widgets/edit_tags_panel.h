@@ -61,9 +61,9 @@ private:
     QPushButton* addButton;
     QPushButton* removeButton;
 
-    QStringList completerStrings;
+    QList<QString> completerStrings;
     QStringListModel listViewModel;
-    QStringList listViewStrings;
+    QList<QString> listViewStrings;
 
 public:
     explicit EditTagsPanel(MfWidgetMode mode, Ontology& ontology, QWidget* parent);

@@ -732,7 +732,7 @@ void MainWindowPresenter::doActionMindLearnRepository()
     learnDialog.setDirectory(homeDirectory);
     learnDialog.setViewMode(QFileDialog::Detail);
 
-    QStringList directoryNames{};
+    QList<QString> directoryNames{};
     if(learnDialog.exec()) {
         directoryNames = learnDialog.selectedFiles();
         if(directoryNames.size()==1) {
@@ -753,7 +753,7 @@ void MainWindowPresenter::doActionMindLearnFile()
     learnDialog.setDirectory(homeDirectory);
     learnDialog.setViewMode(QFileDialog::Detail);
 
-    QStringList directoryNames{};
+    QList<QString> directoryNames{};
     if(learnDialog.exec()) {
         directoryNames = learnDialog.selectedFiles();
         if(directoryNames.size()==1) {
@@ -2100,6 +2100,8 @@ void MainWindowPresenter::handleActionWingman(bool showDialog)
 
 void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 {
+    return;
+    /*
     bool runAsynchronously = true;
 
     // pull prompt from the dialog & prepare prompt from the dialog
@@ -2225,6 +2227,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 
     this->wingmanDialog->setLastPromptLabel();
     this->wingmanDialog->selectPrompt();
+*/
 }
 
 void MainWindowPresenter::slotWingmanAppendFromDialog()
@@ -2503,14 +2506,14 @@ void MainWindowPresenter::doActionOutlineForget()
         };
         QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
 #ifdef __APPLE__
-        yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+        yes->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y));
         yes->setToolTip("⌘Y");
 
         QPushButton* no =
 #endif
         msgBox.addButton("&No", QMessageBox::NoRole);
 #ifdef __APPLE__
-        no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+        no->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
         no->setToolTip("⌘N");
 #endif
         msgBox.exec();
@@ -2599,7 +2602,7 @@ void MainWindowPresenter::doActionOutlineTWikiImport()
     importDialog.setDirectory(homeDirectory);
     importDialog.setViewMode(QFileDialog::Detail);
 
-    QStringList directoryNames{};
+    QList<QString> directoryNames{};
     if(importDialog.exec()) {
         directoryNames = importDialog.selectedFiles();
         if(directoryNames.size()==1) {
@@ -2852,14 +2855,14 @@ void MainWindowPresenter::doActionNoteForget()
             };
             QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
 #ifdef __APPLE__
-            yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+            yes->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y));
             yes->setToolTip("⌘Y");
 
             QPushButton* no =
 #endif
             msgBox.addButton("&No", QMessageBox::NoRole);
 #ifdef __APPLE__
-            no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+            no->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
             no->setToolTip("⌘N");
 #endif
             msgBox.exec();
@@ -3502,14 +3505,14 @@ void MainWindowPresenter::handleRmLibrary()
     };
     QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
 #ifdef __APPLE__
-    yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+    yes->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y));
     yes->setToolTip("⌘Y");
 
     QPushButton* no =
 #endif
     msgBox.addButton("&No", QMessageBox::NoRole);
 #ifdef __APPLE__
-    no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+    no->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
     no->setToolTip("⌘N");
 #endif
     msgBox.exec();

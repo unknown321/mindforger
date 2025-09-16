@@ -26,3 +26,5 @@ deps/mitie
 deps/cmark-gfm
 snapcraft.yaml
 *.snap
+*.swp
+build/qt6-*

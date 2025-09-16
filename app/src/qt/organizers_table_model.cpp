@@ -40,7 +40,7 @@ void OrganizersTableModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
+    QList<QString> tableHeader;
     tableHeader
         << tr("Organizers");
     // IMPROVE set tooltips: items w/ tooltips instead of just strings

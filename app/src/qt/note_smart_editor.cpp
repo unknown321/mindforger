@@ -207,7 +207,7 @@ bool NoteSmartEditor::moveSelectedLinesRightByTab()
     );
 
     if(selection.size()) {
-        QStringList qlines = selection.split(QRegExp(QChar(U_CODE_PARAGRAPH_NL)));
+        QList<QString> qlines = selection.split(QRegularExpression(QChar(U_CODE_PARAGRAPH_NL)));
 
         // MOVE: prepend SPACE and assemble the text
         QString updatedSelection{};
@@ -264,7 +264,7 @@ bool NoteSmartEditor::moveSelectedLinesLeftByTab()
     );
 
     if(selection.size()) {
-        QStringList qlines = selection.split(QRegExp(QChar(U_CODE_PARAGRAPH_NL)));
+        QList<QString> qlines = selection.split(QRegularExpression(QChar(U_CODE_PARAGRAPH_NL)));
 
         // MOVE selected text left by removing leading SPACE from every row
         QString updatedSelection{};
